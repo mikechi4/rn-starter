@@ -1,19 +1,37 @@
 // introducing useState hook 
-import React, {useState} from 'react';
+import React, { useReducer } from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
+
+const reducer = (state, action) => {
+    console.log(state)
+    console.log(`action type: ${action.type}`)
+    console.log(`action payload: ${action.payload}`)
+    switch(action.type) {
+        case 'increase':
+            return {...state, count: state.count + action.payload}
+        case 'decrease':
+            return {...state, count: state.count - action.payload}
+        default: 
+            return state;
+    }
+}
 
 const CounterScreen = () => {
     // array destructering 
-    const [counter, setCounter ] = useState(0);
+    const [state, dispatch ] = useReducer(reducer, {count: 0});
+    const { count } = state;
+    
     return (
         <View>
             <Button title="Increase" onPress={() => {
-                setCounter(counter + 1);
+                console.log('helloo')
+                dispatch({type:"increase", payload: 1 })
+            
             }}/>
             <Button title="Decrease" onPress={() => {
-                setCounter(counter - 1 );
+                dispatch({type:"decrease", payload: 1 })                
             }}/>
-            <Text>Current Count: {counter}</Text>
+            <Text>Current Count: {count}</Text>
         </View>
     )
 };
